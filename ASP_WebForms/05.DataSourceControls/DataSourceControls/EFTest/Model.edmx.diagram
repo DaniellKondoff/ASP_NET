@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="46c1f70c85ce4b669f7ff1757e808011" Name="Diagram1">
+        <EntityTypeShape EntityType="BioBakaryModel.Country" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BioBakaryModel.Customer" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BioBakaryModel.Distributor" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BioBakaryModel.Feedback" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BioBakaryModel.Ingredient" Width="1.5" PointX="5.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BioBakaryModel.Product" Width="1.5" PointX="7.5" PointY="5" IsExpanded="true" />
+        <AssociationConnector Association="BioBakaryModel.FK_Customers_Countries" ManuallyRouted="false" />
+        <AssociationConnector Association="BioBakaryModel.FK_Distributors_Countries" ManuallyRouted="false" />
+        <AssociationConnector Association="BioBakaryModel.FK_Ingredients_Countries" ManuallyRouted="false" />
+        <AssociationConnector Association="BioBakaryModel.FK_Feedback_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="BioBakaryModel.FK_Ingredients_Distributors" ManuallyRouted="false" />
+        <AssociationConnector Association="BioBakaryModel.FK_Feedbacks_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="BioBakaryModel.ProductsIngredients" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BioBakaryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Country">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Customers" Relationship="Self.FK_Customers_Countries" FromRole="Countries" ToRole="Customers" />
+    <NavigationProperty Name="Distributors" Relationship="Self.FK_Distributors_Countries" FromRole="Countries" ToRole="Distributors" />
+    <NavigationProperty Name="Ingredients" Relationship="Self.FK_Ingredients_Countries" FromRole="Countries" ToRole="Ingredients" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Age" Type="Int32" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="CountryId" Type="Int32" />
+    <NavigationProperty Name="Country" Relationship="Self.FK_Customers_Countries" FromRole="Customers" ToRole="Countries" />
+    <NavigationProperty Name="Feedbacks" Relationship="Self.FK_Feedback_Customers" FromRole="Customers" ToRole="Feedbacks" />
+  </EntityType>
+  <EntityType Name="Distributor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="AddressText" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Summary" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CountryId" Type="Int32" />
+    <NavigationProperty Name="Country" Relationship="Self.FK_Distributors_Countries" FromRole="Distributors" ToRole="Countries" />
+    <NavigationProperty Name="Ingredients" Relationship="Self.FK_Ingredients_Distributors" FromRole="Distributors" ToRole="Ingredients" />
+  </EntityType>
+  <EntityType Name="Feedback">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Rate" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="ProductId" Type="Int32" />
+    <Property Name="CustomerId" Type="Int32" />
+    <NavigationProperty Name="Customer" Relationship="Self.FK_Feedback_Customers" FromRole="Feedbacks" ToRole="Customers" />
+    <NavigationProperty Name="Product" Relationship="Self.FK_Feedbacks_Products" FromRole="Feedbacks" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Ingredient">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="OriginCountryId" Type="Int32" />
+    <Property Name="DistributorId" Type="Int32" />
+    <NavigationProperty Name="Country" Relationship="Self.FK_Ingredients_Countries" FromRole="Ingredients" ToRole="Countries" />
+    <NavigationProperty Name="Distributor" Relationship="Self.FK_Ingredients_Distributors" FromRole="Ingredients" ToRole="Distributors" />
+    <NavigationProperty Name="Products" Relationship="Self.ProductsIngredients" FromRole="Ingredients" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Recipe" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="Feedbacks" Relationship="Self.FK_Feedbacks_Products" FromRole="Products" ToRole="Feedbacks" />
+    <NavigationProperty Name="Ingredients" Relationship="Self.ProductsIngredients" FromRole="Products" ToRole="Ingredients" />
+  </EntityType>
+  <Association Name="FK_Customers_Countries">
+    <End Role="Countries" Type="Self.Country" Multiplicity="0..1" />
+    <End Role="Customers" Type="Self.Customer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Countries">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Customers">
+        <PropertyRef Name="CountryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Distributors_Countries">
+    <End Role="Countries" Type="Self.Country" Multiplicity="0..1" />
+    <End Role="Distributors" Type="Self.Distributor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Countries">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Distributors">
+        <PropertyRef Name="CountryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ingredients_Countries">
+    <End Role="Countries" Type="Self.Country" Multiplicity="0..1" />
+    <End Role="Ingredients" Type="Self.Ingredient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Countries">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ingredients">
+        <PropertyRef Name="OriginCountryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Feedback_Customers">
+    <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Feedbacks" Type="Self.Feedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Feedbacks">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ingredients_Distributors">
+    <End Role="Distributors" Type="Self.Distributor" Multiplicity="0..1" />
+    <End Role="Ingredients" Type="Self.Ingredient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Distributors">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ingredients">
+        <PropertyRef Name="DistributorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Feedbacks_Products">
+    <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="Feedbacks" Type="Self.Feedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Feedbacks">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductsIngredients">
+    <End Role="Ingredients" Type="Self.Ingredient" Multiplicity="*" />
+    <End Role="Products" Type="Self.Product" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="BioBakaryEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Countries" EntityType="Self.Country" />
+    <EntitySet Name="Customers" EntityType="Self.Customer" />
+    <EntitySet Name="Distributors" EntityType="Self.Distributor" />
+    <EntitySet Name="Feedbacks" EntityType="Self.Feedback" />
+    <EntitySet Name="Ingredients" EntityType="Self.Ingredient" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <AssociationSet Name="FK_Customers_Countries" Association="Self.FK_Customers_Countries">
+      <End Role="Countries" EntitySet="Countries" />
+      <End Role="Customers" EntitySet="Customers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Distributors_Countries" Association="Self.FK_Distributors_Countries">
+      <End Role="Countries" EntitySet="Countries" />
+      <End Role="Distributors" EntitySet="Distributors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ingredients_Countries" Association="Self.FK_Ingredients_Countries">
+      <End Role="Countries" EntitySet="Countries" />
+      <End Role="Ingredients" EntitySet="Ingredients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Feedback_Customers" Association="Self.FK_Feedback_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Feedbacks" EntitySet="Feedbacks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ingredients_Distributors" Association="Self.FK_Ingredients_Distributors">
+      <End Role="Distributors" EntitySet="Distributors" />
+      <End Role="Ingredients" EntitySet="Ingredients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Feedbacks_Products" Association="Self.FK_Feedbacks_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Feedbacks" EntitySet="Feedbacks" />
+    </AssociationSet>
+    <AssociationSet Name="ProductsIngredients" Association="Self.ProductsIngredients">
+      <End Role="Ingredients" EntitySet="Ingredients" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
